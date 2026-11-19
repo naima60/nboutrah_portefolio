@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naima Boutrah — Portfolio Data Analyst | Étude de cas BottleNeck</title>
+  
+  <!-- Google Fonts : Playfair Display, Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Configuration Tailwind personnalisée -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF8F5',
+            creamDark: '#F2EDE4',
+            bordeaux: {
+              DEFAULT: '#6B1D2F',
+              light: '#8A283F',
+              dark: '#4D1321',
+              soft: '#F9EFF1'
+            },
+            gold: {
+              DEFAULT: '#B8860B',
+              light: '#D4A536',
+              soft: '#FBF6E9'
+            },
+            petrol: {
+              DEFAULT: '#1E3A5F',
+              light: '#2D5282',
+              soft: '#EDF3F8'
+            },
+            ink: '#1E1B18',
+            muted: '#5C554E'
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            card: '0 4px 24px -4px rgba(30, 27, 24, 0.06)',
+            cardHover: '0 12px 32px -4px rgba(107, 29, 47, 0.12)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1E1B18;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-editorial {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF8F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D6CEC2;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6B1D2F;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-bordeaux selection:text-white">
+
+  <!-- ==================== NAVIGATION STICKY ==================== -->
+  <header class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-stone-200/80 transition-all">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-8 xl:gap-12 h-16 md:h-20">
+        <!-- Identité / Logo -->
+        <a href="#presentation" class="flex items-center gap-3 group shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-bordeaux text-white flex items-center justify-center font-editorial font-bold text-lg shadow-sm group-hover:bg-bordeaux-dark transition">
+            NB
+          </div>
+          <div class="hidden sm:block whitespace-nowrap">
+            <span class="block font-editorial font-bold text-base sm:text-lg text-ink leading-tight">Naima Boutrah</span>
+            <span class="block text-xs font-medium text-gold tracking-wider uppercase">Data Analyst</span>
+          </div>
+        </a>
+
+        <!-- Liens Desktop -->
+        <nav class="hidden xl:flex items-center justify-end gap-1 ml-auto text-sm font-medium text-muted">
+          <a href="#presentation" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Présentation</a>
+          <a href="#kpis-dashboard" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Dashboard</a>
+          <a href="#demarche" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Démarche</a>
+          <a href="#audit-anomalies" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Audit</a>
+          <a href="#veille-cdc" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Veille &amp; CDC</a>
+          <a href="#recommandations" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Recommandations</a>
+          <a href="#preuves-complementaires" class="px-3 py-2 rounded-lg whitespace-nowrap hover:text-bordeaux hover:bg-bordeaux-soft/60 transition">Preuves &amp; Contact</a>
+        </nav>
+
+        <!-- Bouton Mobile Menu -->
+        <button id="mobile-menu-btn" aria-label="Ouvrir le menu" class="xl:hidden p-2.5 rounded-xl border border-stone-200 bg-white text-ink hover:bg-creamDark transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Mobile Déroulant -->
+    <div id="mobile-menu" class="hidden xl:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+      <a href="#presentation" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Présentation</a>
+      <a href="#kpis-dashboard" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Chiffres Clés & Dashboard</a>
+      <a href="#demarche" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Démarche & Compétences</a>
+      <a href="#audit-anomalies" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Audit & Anomalies</a>
+      <a href="#veille-cdc" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Veille & Cahier des charges</a>
+      <a href="#recommandations" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Recommandations & Formation</a>
+      <a href="#preuves-complementaires" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Autres preuves (niveaux 2 et 3)</a>
+      <a href="#parcours" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Parcours</a>
+      <a href="#contact" class="mobile-link block px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-bordeaux-soft hover:text-bordeaux">Me contacter</a>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION (PRÉSENTATION) ==================== -->
+  <section id="presentation" class="relative overflow-hidden pt-12 pb-16 sm:pt-16 sm:pb-24 border-b border-stone-200/80">
+    <!-- Décoration subtile en arrière-plan -->
+    <div class="absolute top-0 right-0 -translate-y-12 translate-x-1/4 w-96 h-96 rounded-full bg-bordeaux/5 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/4 w-96 h-96 rounded-full bg-gold/10 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+        
+        <!-- Colonne Principale -->
+        <div class="lg:col-span-8 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-bordeaux-soft border border-bordeaux/20 text-bordeaux text-xs sm:text-sm font-semibold">
+            <span class="w-2 h-2 rounded-full bg-bordeaux animate-pulse"></span>
+            Portfolio Professionnel • Data Analyst • Étude de cas BottleNeck
+          </div>
+
+          <div class="space-y-4">
+            <h1 class="font-editorial text-3xl sm:text-4xl lg:text-5xl xl:text-[3.35rem] font-bold text-ink leading-[1.12] tracking-tight">
+              Naima Boutrah
+            </h1>
+
+            <!-- Paragraphe unique : Présentation & Positionnement -->
+            <p class="text-base sm:text-[1.075rem] text-ink/90 leading-relaxed max-w-3xl">
+              Ancienne <strong class="font-semibold text-ink">cheffe comptable (5 ans)</strong> , <strong class="font-semibold text-ink">consultante formatrice Sage (11 ans)</strong> et récemment diplômée en <strong class="font-semibold text-bordeaux">Data Analyst</strong>, ce portfolio structure mes preuves par niveau de maîtrise et illustre comment ma veille métier et technologique a transformé ma façon de travailler.
+            </p>
+          </div>
+
+          <!-- Badges Stack Technique -->
+          <div class="pt-1">
+            <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-3">Stack Technique & Gouvernance Qualité</p>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-xs sm:text-sm font-mono font-medium text-ink shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-petrol"></span> Python (Pandas, Matplotlib/Seaborn)
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-xs sm:text-sm font-mono font-medium text-ink shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-gold"></span> SQL Analytique (DuckDB)
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-xs sm:text-sm font-mono font-medium text-ink shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span> JupyterLab
+              </span>
+            </div>
+          </div>
+
+          <!-- Boutons d'action -->
+          <div class="flex flex-col sm:flex-row gap-3.5 pt-2">
+            <a href="#kpis-dashboard" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-bordeaux hover:bg-bordeaux-dark text-white font-semibold text-sm sm:text-base shadow-md hover:shadow-lg transition">
+              <span>Explorer le Dashboard Analytique</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+            <a href="#demarche" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-creamDark text-ink border border-stone-300 font-semibold text-sm sm:text-base transition">
+              <span>Découvrir la Méthodologie</span>
+              <svg class="w-4 h-4 text-bordeaux" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte de Synthèse Executive à droite -->
+        <div class="lg:col-span-4 lg:mt-4">
+          <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-7 shadow-card space-y-5">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-gold">Fiche Mission</span>
+                <h2 class="font-editorial text-xl font-bold text-ink mt-0.5">Contexte BottleNeck</h2>
+              </div>
+              <div class="w-11 h-11 rounded-xl bg-gold-soft text-gold flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <p class="text-sm text-muted leading-relaxed">
+              Face à la croissance rapide de son catalogue de vins fins et spiritueux, la maison <strong class="text-ink">BottleNeck</strong> souffrait d'un cloisonnement entre son ERP logistique et sa boutique WooCommerce.
+            </p>
+
+            <ul class="space-y-2.5 text-sm">
+              <li class="flex items-start gap-2.5">
+                <span class="mt-1 w-4 h-4 rounded-full bg-bordeaux-soft text-bordeaux flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span><strong class="text-ink">Objectif 1 :</strong> Réconcilier les flux ERP et la table Liaison via un pipeline reproductible.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="mt-1 w-4 h-4 rounded-full bg-bordeaux-soft text-bordeaux flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span><strong class="text-ink">Objectif 2 :</strong> Isoler les valeurs atypiques et identifier les anomalies critiques du catalogue.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="mt-1 w-4 h-4 rounded-full bg-bordeaux-soft text-bordeaux flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span><strong class="text-ink">Objectif 3 :</strong> Libérer la trésorerie immobilisée sur les stocks dormants.</span>
+              </li>
+            </ul>
+
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-muted">
+              <span>Livrables : Notebook IA, Rapport, CdC</span>
+              <span class="font-mono font-semibold text-petrol bg-petrol-soft px-2.5 py-1 rounded-md">Audit Octobre</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 1 : PÉRIMÈTRE & CHIFFRES CLÉS ==================== -->
+  <section id="kpis-dashboard" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- En-tête de section -->
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">01 • Périmètre & Indicateurs Clés</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">
+          Réconciliation des sources & Performance financière
+        </h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+          Consolidation et audit qualité des trois référentiels internes permettant de dresser une photographie fiable de l'activité commerciale et patrimoniale du mois d'octobre.
+        </p>
+      </div>
+
+      <!-- Bandeau Architecture des 3 Sources -->
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-card reveal">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+          <!-- Source 1 -->
+          <div class="w-full lg:w-1/4 p-4 rounded-xl bg-cream border border-stone-200/80">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-mono text-xs font-bold text-petrol bg-petrol-soft px-2 py-0.5 rounded">erp.xlsx</span>
+              <span class="text-xs font-semibold text-muted">Logistique & Achats</span>
+            </div>
+            <p class="font-editorial text-xl font-bold text-ink mt-2">825 références</p>
+            <p class="text-xs text-muted mt-1">Prix de vente, prix d'achat HT, niveaux de stock et statuts physiques.</p>
+          </div>
+
+          <div class="text-gold font-bold text-xl hidden lg:block">+</div>
+
+          <!-- Source 2 -->
+          <div class="w-full lg:w-1/4 p-4 rounded-xl bg-cream border border-stone-200/80">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-mono text-xs font-bold text-bordeaux bg-bordeaux-soft px-2 py-0.5 rounded">web.xlsx</span>
+              <span class="text-xs font-semibold text-muted">WooCommerce</span>
+            </div>
+            <p class="font-editorial text-xl font-bold text-ink mt-2">1 513 lignes</p>
+            <p class="text-xs text-muted mt-1">Fiches produits, descriptions, visuels (attachments) et volumes vendus.</p>
+          </div>
+
+          <div class="text-gold font-bold text-xl hidden lg:block">+</div>
+
+          <!-- Source 3 -->
+          <div class="w-full lg:w-1/4 p-4 rounded-xl bg-cream border border-stone-200/80">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-mono text-xs font-bold text-gold bg-gold-soft px-2 py-0.5 rounded">liaison.xlsx</span>
+              <span class="text-xs font-semibold text-muted">Table Pivot</span>
+            </div>
+            <p class="font-editorial text-xl font-bold text-ink mt-2">Mapping ID / SKU</p>
+            <p class="text-xs text-muted mt-1">Correspondance entre <code class="text-ink">product_id</code> ERP et <code class="text-ink">id_web</code>.</p>
+          </div>
+
+          <div class="text-bordeaux font-bold text-xl hidden lg:block">➔</div>
+
+          <!-- Résultat Réconciliation -->
+          <div class="w-full lg:w-1/4 p-4 rounded-xl bg-bordeaux text-white shadow-md">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-gold-light">Base Consolidée</span>
+            <p class="font-editorial text-2xl font-bold mt-1">733 réf. actives</p>
+            <p class="text-xs text-stone-200 mt-1.5 leading-relaxed">
+              Réconciliées en ligne + <strong>87 produits ERP</strong> valides non encore publiés sur le web.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grille des 6 KPIs Principaux -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 reveal">
+        
+        <!-- KPI 1 -->
+        <div class="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-muted">Chiffre d'affaires Octobre</span>
+            <span class="w-9 h-9 rounded-xl bg-bordeaux-soft text-bordeaux flex items-center justify-center font-bold">€</span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-ink mt-3 group-hover:text-bordeaux transition">143 324 €</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Généré sur le périmètre e-commerce réconcilié, avec une forte concentration sur les grands crus.
+          </p>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-muted">Valeur du Stock Total</span>
+            <span class="w-9 h-9 rounded-xl bg-petrol-soft text-petrol flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            </span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-ink mt-3 group-hover:text-petrol transition">298 540,07 €</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Valorisation au prix de vente catalogue pour un volume physique de <strong class="text-ink">17 803 bouteilles</strong>.
+          </p>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-muted">Taux de Marge Moyen</span>
+            <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">%</span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-ink mt-3 group-hover:text-emerald-700 transition">93,0 %</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Calculé sur coût d'achat HT (<code class="text-xs bg-stone-100 px-1 py-0.5 rounded">(PV - PA) / PA</code>), porté par la gamme spiritueux.
+          </p>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="bg-white rounded-2xl border-l-4 border-l-gold border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-gold">Capital Immobilisé Flop 20</span>
+            <span class="w-9 h-9 rounded-xl bg-gold-soft text-gold flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-ink mt-3">87 108,25 €</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Soit <strong class="text-ink">29,18 %</strong> de la valeur totale pour 2 052 bouteilles (<strong class="text-bordeaux">&gt; 31 mois</strong> de couverture).
+          </p>
+        </div>
+
+        <!-- KPI 5 -->
+        <div class="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-muted">Outliers Statistiques</span>
+            <span class="w-9 h-9 rounded-xl bg-petrol-soft text-petrol flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            </span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-ink mt-3">25 outliers</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Références atypiques validées par consensus (<strong class="text-ink">IQR, Z-score, Z-score modifié</strong>) : grands crus légitimes.
+          </p>
+        </div>
+
+        <!-- KPI 6 -->
+        <div class="bg-white rounded-2xl border-l-4 border-l-bordeaux border border-stone-200/90 p-6 shadow-card hover:shadow-cardHover transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-bordeaux">Anomalies Critiques</span>
+            <span class="w-9 h-9 rounded-xl bg-bordeaux-soft text-bordeaux flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </span>
+          </div>
+          <p class="font-mono text-2xl sm:text-3xl font-bold text-bordeaux mt-3">124 anomalies</p>
+          <p class="text-xs sm:text-sm text-muted mt-2">
+            Lignes détectées et catégorisées (dont <strong class="text-ink">4 produits vendus à perte</strong>, prix et stocks négatifs).
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ==================== SECTION 2 : VISUALISATIONS INTERACTIVES (CHART.JS) ==================== -->
+      <div class="pt-6 space-y-6 reveal">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-petrol">02 • Visualisations Analytiques</span>
+            <h3 class="font-editorial text-2xl sm:text-3xl font-bold text-ink mt-1">
+              Dashboard interactif : Stocks, Marges & Qualité de données
+            </h3>
+          </div>
+          <p class="text-xs text-muted">Survolez les segments et barres pour explorer les métriques exactes.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Graphique 1 : Répartition et Valorisation du Stock -->
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-stone-200 p-6 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold uppercase tracking-wider text-gold">Structure Patrimoniale</span>
+                <span class="font-mono text-xs font-bold bg-creamDark px-2 py-0.5 rounded text-ink">298 540,07 €</span>
+              </div>
+              <h4 class="font-editorial text-lg font-bold text-ink">Valorisation du Stock & Poids du Flop 20</h4>
+              <p class="text-xs text-muted mt-1">
+                Le stock dormant global pèse 258 348,87 €, dont <strong>87 108,25 € (29,18 %)</strong> concentrés sur les seules 20 références les plus lentes (11,53 % du volume).
+              </p>
+            </div>
+            <div class="relative h-64 my-4">
+              <canvas id="stockChart"></canvas>
+            </div>
+            <div class="grid grid-cols-3 gap-2 pt-3 border-t border-stone-100 text-center text-xs">
+              <div class="p-2 rounded-lg bg-bordeaux-soft/70">
+                <span class="block font-mono font-bold text-bordeaux">29,18 %</span>
+                <span class="text-[11px] text-muted">Flop 20 (87,1 k€)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-gold-soft">
+                <span class="block font-mono font-bold text-gold">57,36 %</span>
+                <span class="text-[11px] text-muted">Autre Dormant (171,2 k€)</span>
+              </div>
+              <div class="p-2 rounded-lg bg-petrol-soft">
+                <span class="block font-mono font-bold text-petrol">13,46 %</span>
+                <span class="text-[11px] text-muted">Stock Actif (40,2 k€)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Graphique 2 : Taux de Marge Brute par Famille -->
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-stone-200 p-6 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold uppercase tracking-wider text-petrol">Rentabilité Catégorielle</span>
+                <span class="font-mono text-xs font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Moyenne : 93,0 %</span>
+              </div>
+              <h4 class="font-editorial text-lg font-bold text-ink">Taux de Marge Brute par Famille de Produits</h4>
+              <p class="text-xs text-muted mt-1">
+                Surperformance nette des Spiritueux (Cognac à 119 %, Whisky/Gin entre 109 % et 118 %) face aux Vins & Champagnes (67 % à 93 %) et à l'Huile d'olive (60 %).
+              </p>
+            </div>
+            <div class="relative h-64 my-4">
+              <canvas id="marginChart"></canvas>
+            </div>
+            <div class="pt-3 border-t border-stone-100 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+              <span>Formule auditée : <code class="font-mono text-ink">(Prix Vente HT - Prix Achat HT) / Prix Achat HT</code></span>
+              <span class="font-semibold text-petrol">Levier de mix-produit identifié</span>
+            </div>
+          </div>
+
+          <!-- Graphique 3 : Répartition des 124 Anomalies Détectées -->
+          <div class="lg:col-span-12 bg-white rounded-2xl border border-stone-200 p-6 shadow-card">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-bordeaux">Audit Data Quality</span>
+                <h4 class="font-editorial text-lg font-bold text-ink">Typologie des 124 Anomalies Détectées sur le Catalogue</h4>
+              </div>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-bordeaux-soft text-bordeaux font-semibold">11 lignes critiques financières/logiques</span>
+                <span class="px-2.5 py-1 rounded-md bg-gold-soft text-gold font-semibold">113 désynchronisations ERP / Web</span>
+              </div>
+            </div>
+            <div class="relative h-64 sm:h-72">
+              <canvas id="anomaliesChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 3 : RÉFÉRENTIEL HIÉRARCHISÉ DES 5 COMPÉTENCES ==================== -->
+  <section id="demarche" class="py-16 sm:py-20 bg-creamDark/60 border-y border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">03 • Démarche & Compétences</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">
+          Référentiel hiérarchisé en 5 niveaux de maîtrise Data
+        </h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+          Une progression structurée allant de l'ingestion sécurisée des données brutes jusqu'à la conduite du changement auprès des équipes opérationnelles.
+        </p>
+      </div>
+
+      <!-- Grille des 5 Niveaux -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
+        
+        <!-- Niveau 1 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full bg-petrol text-white font-mono text-xs font-bold">Niveau 1</span>
+              <span class="text-xs font-semibold text-petrol">Data Engineering</span>
+            </div>
+            <h3 class="font-editorial text-lg font-bold text-ink">Ingénierie des données & Réconciliation ERP/Web</h3>
+            <p class="text-sm text-muted mt-2.5 leading-relaxed">
+              Orchestration via <strong>DuckDB et Pandas</strong> : traitement des clés orphelines, élimination des doublons techniques WooCommerce (<code class="text-xs bg-stone-100 px-1 rounded">post_type = product</code>) et validation stricte aboutissant à <strong>733 références réconciliées</strong>.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">DuckDB</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Pandas</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Zero Doublon</span>
+          </div>
+        </div>
+
+        <!-- Niveau 2 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full bg-bordeaux text-white font-mono text-xs font-bold">Niveau 2</span>
+              <span class="text-xs font-semibold text-bordeaux">Statistiques Avancées</span>
+            </div>
+            <h3 class="font-editorial text-lg font-bold text-ink">Analyse statistique avancée & Détection d'Outliers</h3>
+            <p class="text-sm text-muted mt-2.5 leading-relaxed">
+              Triangulation méthodologique combinant <strong>IQR (interquartile), Z-score (&gt; 3) et Z-score modifié (&gt; 3,5)</strong>. Ce consensus permet d'isoler exactement <strong>25 grands crus et champagnes millésimés légitimes</strong> sans aucun faux positif.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">IQR</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Z-score Modifié</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">25 Grands Crus</span>
+          </div>
+        </div>
+
+        <!-- Niveau 3 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full bg-gold text-white font-mono text-xs font-bold">Niveau 3</span>
+              <span class="text-xs font-semibold text-gold">Business Intelligence</span>
+            </div>
+            <h3 class="font-editorial text-lg font-bold text-ink">Performance commerciale & Concentration</h3>
+            <p class="text-sm text-muted mt-2.5 leading-relaxed">
+              Modélisation de la <strong>Courbe de Lorenz / Pareto</strong> : 63 % des références vendues génèrent 80 % du CA. Le Top 20 représente <strong>15 830 € (11 % du CA)</strong> avec un focus critique sur la maison stratégique <strong>Egly-Ouriet</strong>.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Courbe de Lorenz</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Top 20 CA</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Egly-Ouriet</span>
+          </div>
+        </div>
+
+        <!-- Niveau 4 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full bg-petrol text-white font-mono text-xs font-bold">Niveau 4</span>
+              <span class="text-xs font-semibold text-petrol">Contrôle de Gestion</span>
+            </div>
+            <h3 class="font-editorial text-lg font-bold text-ink">Audit financier des marges & Stock dormant</h3>
+            <p class="text-sm text-muted mt-2.5 leading-relaxed">
+              Valorisation patrimoniale à <strong>298 540,07 €</strong>, identification de <strong>132/820 références sans aucune vente en octobre</strong> (36 171 € de stock dormant strict) et extraction du Flop 20 affichant <strong>&gt; 31 mois de rotation</strong>.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">BFR & Rotation</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Flop 20</span>
+            <span class="text-[11px] font-mono bg-cream px-2 py-0.5 rounded border border-stone-200">Marges HT</span>
+          </div>
+        </div>
+
+        <!-- Niveau 5 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col justify-between md:col-span-2 lg:col-span-2">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full bg-bordeaux text-white font-mono text-xs font-bold">Niveau 5</span>
+              <span class="text-xs font-semibold text-bordeaux">Gouvernance & Impact Métier</span>
+            </div>
+            <h3 class="font-editorial text-lg font-bold text-ink">Communication exécutive & Conduite du changement</h3>
+            <p class="text-sm text-muted mt-2.5 leading-relaxed">
+              Traduction des diagnostics techniques en outils opérationnels pérennes : rédaction d'un <strong>Cahier des Charges Fonctionnel (CF-01 à CF-05)</strong> pour la DSI/ERP et conception d'une <strong>mini-formation métier en 3 modules</strong> destinée aux équipes E-commerce, Achats et Logistique afin d'ancrer la culture Data Quality.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 flex flex-wrap gap-2">
+            <span class="text-[11px] font-mono bg-bordeaux-soft text-bordeaux px-2.5 py-0.5 rounded font-semibold">Cahier des charges CF-01 à CF-05</span>
+            <span class="text-[11px] font-mono bg-gold-soft text-gold px-2.5 py-0.5 rounded font-semibold">3 Modules de Formation</span>
+            <span class="text-[11px] font-mono bg-petrol-soft text-petrol px-2.5 py-0.5 rounded font-semibold">Aide à la décision COMEX</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 4 : EXPLORATEUR INTERACTIF DES ANOMALIES ==================== -->
+  <section id="audit-anomalies" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 reveal">
+        <div class="max-w-3xl">
+          <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">04 • Audit & Cas Critiques</span>
+          <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">
+            Explorateur interactif des anomalies détectées
+          </h2>
+          <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+            Sélectionnez une catégorie d'anomalie pour inspecter les références réelles isolées lors de l'audit du catalogue BottleNeck et leur impact financier immédiat.
+          </p>
+        </div>
+
+        <!-- Compteur dynamique -->
+        <div class="bg-white px-4 py-3 rounded-xl border border-stone-200 shadow-sm shrink-0">
+          <span class="text-xs text-muted block">Cas affichés dans l'échantillon d'audit</span>
+          <span id="anomaly-counter" class="font-mono text-lg font-bold text-bordeaux">10 références critiques</span>
+        </div>
+      </div>
+
+      <!-- Boutons de Filtres Interactifs -->
+      <div class="flex flex-wrap gap-2 reveal" role="group" aria-label="Filtrer les anomalies">
+        <button data-filter="all" class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-bordeaux text-white shadow-sm transition">
+          Tous les cas critiques (10)
+        </button>
+        <button data-filter="marge_negative" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-bordeaux transition">
+          Marge négative (4)
+        </button>
+        <button data-filter="prix_negatif" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-bordeaux transition">
+          Prix négatif (1)
+        </button>
+        <button data-filter="stock_negatif" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-bordeaux transition">
+          Stock négatif (2)
+        </button>
+        <button data-filter="statut_incoherent" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-bordeaux transition">
+          Statut incohérent (2)
+        </button>
+        <button data-filter="rupture_publie" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-bordeaux transition">
+          Publié en rupture (Ex. Egly-Ouriet)
+        </button>
+      </div>
+
+      <!-- Tableau Responsive -->
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-card overflow-hidden reveal">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-creamDark/80 border-b border-stone-200 text-xs font-bold uppercase tracking-wider text-muted">
+                <th class="py-3.5 px-4">ID ERP</th>
+                <th class="py-3.5 px-4">Catégorie d'anomalie</th>
+                <th class="py-3.5 px-4">Désignation / Référence</th>
+                <th class="py-3.5 px-4 text-right">Prix Vente</th>
+                <th class="py-3.5 px-4 text-right">Prix Achat</th>
+                <th class="py-3.5 px-4 text-right">Marge / Écart</th>
+                <th class="py-3.5 px-4 text-center">Stock & Statut</th>
+                <th class="py-3.5 px-4">Diagnostic & Action</th>
+              </tr>
+            </thead>
+            <tbody id="anomalies-tbody" class="divide-y divide-stone-100 text-sm">
+              <!-- Injecté dynamiquement par JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 5 : VEILLE, CAHIER DES CHARGES & FORMATION ==================== -->
+  <section id="veille-cdc" class="py-16 sm:py-20 bg-creamDark/60 border-y border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-petrol">05 • Gouvernance, Veille & Accompagnement</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">
+          Documentation méthodologique & Conduite du changement
+        </h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+          Explorez les 4 piliers méthodologiques du projet BottleNeck : veille sectorielle et technologique, spécifications fonctionnelles, plan de formation et validation des hypothèses.
+        </p>
+      </div>
+
+      <!-- Barre d'Onglets Interactifs -->
+      <div class="flex flex-wrap gap-2 border-b border-stone-200 pb-3 reveal" role="tablist">
+        <button data-tab="tab-veille" class="tab-btn active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-petrol text-white shadow-sm transition">
+          1. Veille Métier & Tech
+        </button>
+        <button data-tab="tab-cdc" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-petrol transition">
+          2. Cahier des Charges (CF-01 à CF-05)
+        </button>
+        <button data-tab="tab-formation" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-petrol transition">
+          3. Mini-Formation Métiers (3 Modules)
+        </button>
+        <button data-tab="tab-hypotheses" class="tab-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-ink border border-stone-200 hover:border-petrol transition">
+          4. Hypothèses (H1-H4) & Limites
+        </button>
+      </div>
+
+      <!-- Contenu Onglet 1 : Veille -->
+      <div id="tab-veille" class="tab-panel grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card space-y-3">
+          <span class="inline-block px-3 py-1 rounded-lg bg-bordeaux-soft text-bordeaux text-xs font-bold">Veille Métier • Vins & Spiritueux</span>
+          <h3 class="font-editorial text-xl font-bold text-ink">Loi de Pareto & Gestion du BFR</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Dans le négoce de vins fins, l'immobilisation financière des millésimes à faible rotation pèse lourdement sur le Besoin en Fonds de Roulement (BFR) et les frais de stockage climatisé. Le pilotage par couverture de stock (en mois) devient indispensable face à la hausse des taux de financement.
+          </p>
+          <div class="pt-2 text-xs font-semibold text-bordeaux">Application : Extraction du Flop 20 (&gt; 31 mois de couverture).</div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card space-y-3">
+          <span class="inline-block px-3 py-1 rounded-lg bg-gold-soft text-gold text-xs font-bold">Veille Méthodologique • Statistiques</span>
+          <h3 class="font-editorial text-xl font-bold text-ink">Triangulation Anti-Faux Positifs</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Les distributions de prix dans le luxe et les grands crus sont fortement asymétriques à droite. L'usage isolé de l'écart-type classique génère des alertes erronées. La combinaison <strong>IQR + Z-score + Z-score modifié (basé sur la médiane/MAD)</strong> garantit une détection robuste.
+          </p>
+          <div class="pt-2 text-xs font-semibold text-gold">Application : 25 grands crus authentifiés sans faux positifs.</div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card space-y-3">
+          <span class="inline-block px-3 py-1 rounded-lg bg-petrol-soft text-petrol text-xs font-bold">Veille Technologique • Modern Data Stack</span>
+          <h3 class="font-editorial text-xl font-bold text-ink">Architecture Hybride Python + DuckDB</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            L'intégration in-process de <strong>DuckDB</strong> au sein de Python permet d'exécuter des jointures analytiques SQL complexes à très haute vitesse sans infrastructure serveur lourde.
+          </p>
+          <div class="pt-2 text-xs font-semibold text-petrol">Application : Pipeline 100 % reproductible et auditable.</div>
+        </div>
+      </div>
+
+      <!-- Contenu Onglet 2 : Cahier des Charges -->
+      <div id="tab-cdc" class="tab-panel hidden bg-white rounded-2xl border border-stone-200 shadow-card overflow-hidden">
+        <div class="p-6 border-b border-stone-100">
+          <h3 class="font-editorial text-xl font-bold text-ink">Spécifications Fonctionnelles de Fiabilisation (CF-01 à CF-05)</h3>
+          <p class="text-xs sm:text-sm text-muted mt-1">Exigences livrées à la Direction et à la DSI pour automatiser la gouvernance ERP / WooCommerce.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-cream text-xs font-bold uppercase tracking-wider text-muted border-b border-stone-200">
+                <th class="py-3.5 px-4">Code</th>
+                <th class="py-3.5 px-4">Domaine</th>
+                <th class="py-3.5 px-4">Exigence Fonctionnelle</th>
+                <th class="py-3.5 px-4">Critère d'Acceptation</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 text-sm">
+              <tr>
+                <td class="py-3.5 px-4 font-mono font-bold text-bordeaux">CF-01</td>
+                <td class="py-3.5 px-4 font-semibold text-ink">Intégrité Référentielle</td>
+                <td class="py-3.5 px-4 text-muted">Obliger la saisie d'une clé <code class="text-xs bg-stone-100 px-1 rounded">id_web</code> unique dès la création d'une fiche produit dans l'ERP.</td>
+                <td class="py-3.5 px-4 text-xs font-medium text-emerald-700">0 référence orpheline lors des exports mensuels.</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-mono font-bold text-bordeaux">CF-02</td>
+                <td class="py-3.5 px-4 font-semibold text-ink">Contrôle Tarifaire & Marge</td>
+                <td class="py-3.5 px-4 text-muted">Bloquer toute validation de tarif si <code class="text-xs bg-stone-100 px-1 rounded">Prix Vente HT ≤ Prix Achat HT</code> ou si prix ≤ 0 €.</td>
+                <td class="py-3.5 px-4 text-xs font-medium text-emerald-700">100 % des ventes à perte bloquées avant publication web.</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-mono font-bold text-bordeaux">CF-03</td>
+                <td class="py-3.5 px-4 font-semibold text-ink">Cohérence des Stocks</td>
+                <td class="py-3.5 px-4 text-muted">Interdire les stocks négatifs et automatiser le basculement <code class="text-xs bg-stone-100 px-1 rounded">instock / outofstock</code> selon le stock réel.</td>
+                <td class="py-3.5 px-4 text-xs font-medium text-emerald-700">Synchronisation temps réel ERP ↔ WooCommerce.</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-mono font-bold text-bordeaux">CF-04</td>
+                <td class="py-3.5 px-4 font-semibold text-ink">Audit Statistique Outliers</td>
+                <td class="py-3.5 px-4 text-muted">Exécuter mensuellement le script DuckDB et soumettre les prix atypiques à validation Achats.</td>
+                <td class="py-3.5 px-4 text-xs font-medium text-emerald-700">Rapport d'exception généré en &lt; 5 secondes.</td>
+              </tr>
+              <tr>
+                <td class="py-3.5 px-4 font-mono font-bold text-bordeaux">CF-05</td>
+                <td class="py-3.5 px-4 font-semibold text-ink">Pilotage Rotation & BFR</td>
+                <td class="py-3.5 px-4 text-muted">Déclencher une alerte automatique sur toute référence dépassant 12 mois de couverture de stock.</td>
+                <td class="py-3.5 px-4 text-xs font-medium text-emerald-700">Revue trimestrielle du Flop 20 par le comité commercial.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Contenu Onglet 3 : Mini-Formation Métiers -->
+      <div id="tab-formation" class="tab-panel hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-bordeaux text-white text-xs font-bold">Module 1 • 45 min</span>
+              <span class="text-xs font-semibold text-muted">Équipes E-commerce & ADV</span>
+            </div>
+            <h3 class="font-editorial text-xl font-bold text-ink">Fiabiliser le catalogue & la synchronisation</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-muted">
+              <li class="flex items-start gap-2"><span class="text-bordeaux font-bold">•</span> Comprendre le rôle pivot de la table de liaison (<code class="text-xs">product_id</code> / SKU).</li>
+              <li class="flex items-start gap-2"><span class="text-bordeaux font-bold">•</span> Éliminer les 48 références publiées en rupture de stock et valoriser les 65 références en stock non publiées.</li>
+              <li class="flex items-start gap-2"><span class="text-bordeaux font-bold">•</span> Check-list avant mise en ligne d'un nouveau millésime.</li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 text-xs font-semibold text-bordeaux">Livrable : Guide réflexe de saisie ERP/Web</div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-gold text-white text-xs font-bold">Module 2 • 1h00</span>
+              <span class="text-xs font-semibold text-muted">Direction & Acheteurs</span>
+            </div>
+            <h3 class="font-editorial text-xl font-bold text-ink">Lire la rentabilité & protéger les marges</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-muted">
+              <li class="flex items-start gap-2"><span class="text-gold font-bold">•</span> Distinguer taux de marge sur coût d'achat (93,0 %) et taux de marque.</li>
+              <li class="flex items-start gap-2"><span class="text-gold font-bold">•</span> Exploiter le levier des Spiritueux (&gt; 109 % de marge) dans les campagnes CRM.</li>
+              <li class="flex items-start gap-2"><span class="text-gold font-bold">•</span> Détecter les erreurs de saisie tarifaire (cas ID 4355 Egly-Ouriet à 12,65 €).</li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 text-xs font-semibold text-gold">Livrable : Simulateur de marge & grille tarifaire</div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-full bg-petrol text-white text-xs font-bold">Module 3 • 1h00</span>
+              <span class="text-xs font-semibold text-muted">Logistique & Contrôle de Gestion</span>
+            </div>
+            <h3 class="font-editorial text-xl font-bold text-ink">Piloter la rotation & réduire le BFR</h3>
+            <ul class="mt-4 space-y-2.5 text-sm text-muted">
+              <li class="flex items-start gap-2"><span class="text-petrol font-bold">•</span> Calculer la couverture de stock en mois et identifier le stock dormant.</li>
+              <li class="flex items-start gap-2"><span class="text-petrol font-bold">•</span> Suivre l'indicateur Flop 20 (87 108 € immobilisés) pour déclencher des opérations de déstockage ciblées.</li>
+              <li class="flex items-start gap-2"><span class="text-petrol font-bold">•</span> Réconcilier les inventaires physiques face aux statuts ERP.</li>
+            </ul>
+          </div>
+          <div class="mt-5 pt-3 border-t border-stone-100 text-xs font-semibold text-petrol">Livrable : Tableau de bord mensuel des rotations</div>
+        </div>
+      </div>
+
+      <!-- Contenu Onglet 4 : Hypothèses & Limites -->
+      <div id="tab-hypotheses" class="tab-panel hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card space-y-4">
+          <h3 class="font-editorial text-xl font-bold text-ink">Validation des Hypothèses de Travail (H1 à H4)</h3>
+          <div class="space-y-3 text-sm">
+            <div class="p-3.5 rounded-xl bg-cream border border-stone-200/80">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-ink">H1 — Unicité des clés de jointure</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Validée après nettoyage</span>
+              </div>
+              <p class="text-xs text-muted mt-1">La déduplication des lignes WooCommerce (<code class="text-ink">attachment</code>) permet une jointure 1:1 stricte sur 733 références.</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-cream border border-stone-200/80">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-ink">H2 — Légitimité des prix extrêmes (Outliers)</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Validée (25 réf.)</span>
+              </div>
+              <p class="text-xs text-muted mt-1">Les 25 valeurs hautes isolées par consensus statistique correspondent toutes à des cuvées de prestige (Champagnes millésimés, Grands Crus).</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-cream border border-stone-200/80">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-ink">H3 — Concentration de Pareto du CA</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Confirmée (63 % → 80 %)</span>
+              </div>
+              <p class="text-xs text-muted mt-1">La loi de concentration est marquée : 63 % des produits vendus génèrent 80 % des revenus d'octobre.</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-cream border border-stone-200/80">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-ink">H4 — Risque BFR sur le stock dormant</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">Critique (29,18 % sur Flop 20)</span>
+              </div>
+              <p class="text-xs text-muted mt-1">Près d'un tiers de la valeur totale du stock est bloqué sur seulement 20 références à rotation supérieure à 31 mois.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card space-y-4">
+          <h3 class="font-editorial text-xl font-bold text-ink">Limites Méthodologiques & Périmètre</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Une démarche rigoureuse de Data Analyst implique d'expliciter les biais potentiels afin d'éclairer les décisions du comité de direction :
+          </p>
+          <ul class="space-y-3 text-sm text-muted">
+            <li class="p-3.5 rounded-xl bg-bordeaux-soft/40 border border-bordeaux/10">
+              <strong class="text-ink block mb-1">1. Fenêtre temporelle limitée au mois d'octobre</strong>
+              L'extrapolation des vitesses de rotation sur l'année ne capture pas encore la forte saisonnalité des fêtes de fin d'année (novembre-décembre) ni les foires aux vins de printemps.
+            </li>
+            <li class="p-3.5 rounded-xl bg-bordeaux-soft/40 border border-bordeaux/10">
+              <strong class="text-ink block mb-1">2. Absence d'identifiant client (CRM / Panier moyen)</strong>
+              Les données issues de <code class="text-xs">web.xlsx</code> sont agrégées par produit (<code class="text-xs">total_sales</code>) et ne permettent pas d'analyser la récurrence d'achat B2B vs B2C ni les ventes croisées.
+            </li>
+            <li class="p-3.5 rounded-xl bg-bordeaux-soft/40 border border-bordeaux/10">
+              <strong class="text-ink block mb-1">3. Marge brute calculée hors coûts logistiques</strong>
+              Les marges analysées (93,0 % en moyenne) n'intègrent pas les frais de port offerts, la casse, ni le coût de stockage en cave climatisée.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 6 : PLAN D'ACTIONS STRATÉGIQUES ==================== -->
+  <section id="recommandations" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">06 • Décisions & Impact Business</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">
+          4 recommandations prioritaires pour la direction de BottleNeck
+        </h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+          Feuille de route opérationnelle chiffrée visant à assainir immédiatement la base tarifaire, accélérer la rotation des stocks et maximiser la marge globale.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+        
+        <!-- Action 1 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-7 shadow-card hover:shadow-cardHover transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-3.5 py-1 bg-gold text-white font-mono text-xs font-bold rounded-bl-xl">
+            Impact : 87 108 € BFR
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-gold">Priorité 1 • Trésorerie & Stocks</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Plan de déstockage VIP sur le Flop 20</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">
+            Lancer des ventes privées ciblées, coffrets découverte ou remises progressives sur les <strong>20 références immobilisant 87 108,25 €</strong> (&gt; 31 mois de stock) afin de libérer rapidement du cash et de l'espace de stockage.
+          </p>
+        </div>
+
+        <!-- Action 2 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-7 shadow-card hover:shadow-cardHover transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-3.5 py-1 bg-bordeaux text-white font-mono text-xs font-bold rounded-bl-xl">
+            Protection CA & Image
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-bordeaux">Priorité 2 • Achats & Fournisseurs</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Sécurisation des quotas clés (Maison Egly-Ouriet)</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">
+            Renforcer les allocations sur les cuvées locomotrices à forte demande (ex. <em>Champagne Egly-Ouriet Grand Cru Millésimé 2008</em> à 225 €, actuellement publié en rupture) et activer des alertes de réassort anticipé.
+          </p>
+        </div>
+
+        <!-- Action 3 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-7 shadow-card hover:shadow-cardHover transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-3.5 py-1 bg-petrol text-white font-mono text-xs font-bold rounded-bl-xl">
+            Marge &gt; 110 %
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-petrol">Priorité 3 • Marketing & Mix-Produit</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Mise en avant stratégique des Spiritueux</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">
+            Déployer du cross-selling sur la boutique WooCommerce pour pousser les <strong>Cognacs (119 % de marge), Whiskies et Gins (109 % à 118 %)</strong>, tout en mettant en ligne les <strong>65 références en stock non publiées</strong>.
+          </p>
+        </div>
+
+        <!-- Action 4 -->
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-7 shadow-card hover:shadow-cardHover transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-3.5 py-1 bg-emerald-700 text-white font-mono text-xs font-bold rounded-bl-xl">
+            0 Vente à perte
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Priorité 4 • Gouvernance SI</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Règles d'alerte bloquantes dans l'ERP</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">
+            Implémenter les verrous du cahier des charges (CF-01 à CF-03) : blocage des prix ≤ coût d'achat (correction immédiate de l'ID 4355 à 12,65 € vs 77,48 €), interdiction des stocks négatifs et synchronisation automatique des statuts.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== NIVEAU 2 ET NIVEAU 3 ==================== -->
+  <section id="preuves-complementaires" class="py-16 sm:py-20 bg-creamDark/60 border-y border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">07 • Autres preuves de compétences</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">Niveau 2 : preuves complémentaires</h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">
+          BottleNeck est ma preuve phare (niveau 1). Ces projets montrent d'autres outils et d'autres types de problèmes : machine learning, data engineering, statistiques, bases de données et Power BI.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Machine learning</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Détection de faux billets</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Modèle de régression logistique pour l'ONCFM, sauvegardé dans un pipeline et utilisable en ligne de commande avec le script detect_billets.py.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Python</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Régression logistique</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Pipeline joblib</span></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Machine learning</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Export de volaille : quels pays cibler ?</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Analyse complète, de la collecte au nettoyage des données, puis ACP et clustering pour regrouper les pays. Les groupes obtenus aident une entreprise à choisir ses marchés d'export.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">ACP</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Clustering</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Réduction de dimensions</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Aide à la décision</span></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Data engineering</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Profil sociodémographique des étudiants Data d'OpenClassrooms</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Analyse de l'évolution du profil des étudiants Data, avec une chaîne de transformation des données construite avec dbt sur l'entrepôt Snowflake.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">dbt</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Snowflake</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">SQL</span></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Analyse statistique</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Santé publique : données FAO</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Étude statistique de la faim dans le monde, avec visualisation de l'insécurité alimentaire.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Python</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Pandas</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Matplotlib</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Seaborn</span></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Bases de données</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Base de données immobilière conforme au RGPD</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Modélisation, conception et interrogation d'une base de données qui respecte la protection des données personnelles.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">SQL</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Modélisation</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">RGPD</span></div>
+        </div>
+        <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-card hover:shadow-cardHover transition flex flex-col">
+          <span class="text-xs font-bold tracking-wider text-gold">Business intelligence</span>
+          <h3 class="font-editorial text-xl font-bold text-ink mt-2">Tableau de bord de suivi de projets</h3>
+          <p class="text-sm text-muted mt-3 leading-relaxed">Indicateurs d'avancement et alertes visuelles dans Power BI.</p>
+          <div class="flex flex-wrap gap-2 mt-4"><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Power BI</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">DAX</span><span class="px-2.5 py-1 rounded-md bg-petrol-soft text-petrol text-xs font-semibold">Tableau de bord</span></div>
+        </div>
+      </div>
+
+      <div class="max-w-3xl reveal">
+        <h2 class="font-editorial text-2xl sm:text-3xl font-bold text-ink">Niveau 3 : socle</h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">Les bases solides sur lesquelles tout repose.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 reveal">
+        <div class="bg-white rounded-xl border border-stone-200 p-5 shadow-card">
+          <span class="text-xs font-semibold text-petrol">Excel</span>
+          <h3 class="font-editorial text-base font-bold text-ink mt-1">Ventes en ligne</h3>
+          <p class="text-sm text-muted mt-1.5">Analyse et storytelling dans Excel.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-stone-200 p-5 shadow-card">
+          <span class="text-xs font-semibold text-petrol">SQL</span>
+          <h3 class="font-editorial text-base font-bold text-ink mt-1">Logement</h3>
+          <p class="text-sm text-muted mt-1.5">Requêtes SQL d'analyse de marché.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-stone-200 p-5 shadow-card">
+          <span class="text-xs font-semibold text-petrol">Python</span>
+          <h3 class="font-editorial text-base font-bold text-ink mt-1">Optimisation d'une boutique</h3>
+          <p class="text-sm text-muted mt-1.5">Nettoyage et analyses multivariées en Python.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PARCOURS ==================== -->
+  <section id="parcours" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">08 • Expériences</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">Parcours</h2>
+      </div>
+      <ul class="max-w-3xl border-l-2 border-stone-300 ml-1.5 space-y-8 reveal">
+        <li class="relative pl-7">
+          <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-bordeaux"></span>
+          <h3 class="font-editorial text-lg font-bold text-ink">Formation Data Analyst</h3>
+          <p class="text-xs text-muted">OpenClassrooms · promotion 2025/2026</p>
+          <p class="text-sm text-muted mt-1.5 leading-relaxed">Projets en Python, SQL, Power BI et machine learning.</p>
+        </li>
+        <li class="relative pl-7">
+          <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-bordeaux"></span>
+          <h3 class="font-editorial text-lg font-bold text-ink">Consultante formatrice Sage</h3>
+          <p class="text-xs text-muted">2009–2021</p>
+          <p class="text-sm text-muted mt-1.5 leading-relaxed">Paie RH, comptabilité, gestion commerciale : paramétrage, déploiement SQL, formation des équipes.</p>
+        </li>
+        <li class="relative pl-7">
+          <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-bordeaux"></span>
+          <h3 class="font-editorial text-lg font-bold text-ink">Cheffe comptable, Coca-Cola</h3>
+          <p class="text-xs text-muted">1999–2003</p>
+          <p class="text-sm text-muted mt-1.5 leading-relaxed">Reporting financier, clôtures, supervision de filiales.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contact" class="py-16 sm:py-20 bg-creamDark/60 border-t border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-bordeaux">09 • Contact</span>
+        <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-ink mt-2">Me contacter</h2>
+        <p class="text-muted text-sm sm:text-base mt-3 leading-relaxed">Disponible pour des missions en analyse de données, reporting financier et consulting Sage.</p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          <a href="mailto:ton.email@exemple.fr" class="px-6 py-3 rounded-xl bg-bordeaux hover:bg-bordeaux-dark text-white font-semibold text-sm transition">Écrire un e-mail</a>
+          <a href="https://www.linkedin.com/in/naima-boutrah/" target="_blank" rel="noopener" class="px-6 py-3 rounded-xl bg-white hover:bg-creamDark text-ink border border-stone-300 font-semibold text-sm transition">LinkedIn</a>
+          <a href="https://github.com/naima60/analyse_donnees_bottleneck" target="_blank" rel="noopener" class="px-6 py-3 rounded-xl bg-white hover:bg-creamDark text-ink border border-stone-300 font-semibold text-sm transition">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-ink text-stone-300 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-bordeaux text-white flex items-center justify-center font-editorial font-bold">
+              NB
+            </div>
+            <span class="font-editorial text-lg font-bold text-white">Naima Boutrah — Portfolio Data Analyst 2025/2026</span>
+          </div>
+          <p class="text-xs sm:text-sm text-stone-400">
+            Étude de cas BottleNeck • Audit des données, analyse de rentabilité et optimisation des stocks.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3 text-xs">
+          <a href="#presentation" class="px-3 py-2 rounded-lg bg-stone-800 hover:bg-bordeaux text-stone-200 transition">Haut de page ↑</a>
+          <a href="#kpis-dashboard" class="px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 transition">Dashboard</a>
+          <a href="#audit-anomalies" class="px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 transition">Explorateur Anomalies</a>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-stone-800/90 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
+        <span>Réalisé avec Python (Pandas, DuckDB) • Visualisation analytique interactive</span>
+        <span>Naima Boutrah — Portfolio Data Analyst 2025/2026 • Étude de cas BottleNeck</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT INTERACTIF ==================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. Menu Mobile Toggle
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileLinks = document.querySelectorAll('.mobile-link');
+
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+
+      // 2. Animation douce au défilement (IntersectionObserver)
+      const revealElements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      revealElements.forEach(el => observer.observe(el));
+
+      // 3. Données et Filtrage de l'Explorateur d'Anomalies
+      const anomaliesData = [
+        {
+          id: 'ID 4355',
+          category: 'marge_negative',
+          badge: 'Marge négative',
+          badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+          title: 'Champagne Egly-Ouriet Grand Cru Blanc de Noirs',
+          prixVente: '12,65 €',
+          prixAchat: '77,48 €',
+          marge: '-83,67 %',
+          margeClass: 'text-rose-700 font-bold',
+          stock: '97 en stock (instock)',
+          action: 'Erreur critique de saisie tarifaire : bloquer la vente et rétablir le prix catalogue.'
+        },
+        {
+          id: 'ID 6324',
+          category: 'marge_negative',
+          badge: 'Marge négative',
+          badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+          title: 'Référence Grand Format / Millésime (Non publié)',
+          prixVente: '92,00 €',
+          prixAchat: '99,00 €',
+          marge: '-7,07 %',
+          margeClass: 'text-rose-700 font-bold',
+          stock: '18 en stock (Non publié)',
+          action: 'Réviser le prix de vente avant toute mise en ligne WooCommerce.'
+        },
+        {
+          id: 'ID 7196',
+          category: 'marge_negative',
+          badge: 'Marge négative',
+          badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+          title: 'Cuvée Sélection Cave (Non publié)',
+          prixVente: '31,00 €',
+          prixAchat: '31,20 €',
+          marge: '-0,64 %',
+          margeClass: 'text-rose-700 font-bold',
+          stock: '55 en stock (Non publié)',
+          action: 'Ajuster le coefficient multiplicateur suite à la hausse du tarif fournisseur.'
+        },
+        {
+          id: 'ID 4864',
+          category: 'marge_negative',
+          badge: 'Marge négative',
+          badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+          title: 'Vin de Pays / Entrée de gamme',
+          prixVente: '8,30 €',
+          prixAchat: '9,99 €',
+          marge: '-16,92 %',
+          margeClass: 'text-rose-700 font-bold',
+          stock: '0 en stock (Rupture)',
+          action: 'Mettre à jour la fiche tarifaire avant le prochain réassort.'
+        },
+        {
+          id: 'ID 6594',
+          category: 'prix_negatif',
+          badge: 'Prix négatif',
+          badgeClass: 'bg-red-100 text-red-900 border-red-200',
+          title: 'Référence Catalogue ERP #6594',
+          prixVente: '-9,10 €',
+          prixAchat: 'N/A',
+          marge: 'Invalide',
+          margeClass: 'text-red-700 font-bold',
+          stock: '19 en stock',
+          action: 'Inversion de signe lors de l’import ERP : corriger en +9,10 €.'
+        },
+        {
+          id: 'ID 4973',
+          category: 'stock_negatif',
+          badge: 'Stock négatif',
+          badgeClass: 'bg-amber-100 text-amber-900 border-amber-200',
+          title: 'Référence Logistique ERP #4973',
+          prixVente: 'Catalogue',
+          prixAchat: 'Catalogue',
+          marge: 'Écart inventaire',
+          margeClass: 'text-amber-700 font-semibold',
+          stock: '-10 unités',
+          action: 'Ventes enregistrées sans réception informatique : déclencher un inventaire physique.'
+        },
+        {
+          id: 'ID 5700',
+          category: 'stock_negatif',
+          badge: 'Stock négatif',
+          badgeClass: 'bg-amber-100 text-amber-900 border-amber-200',
+          title: 'Référence Logistique ERP #5700',
+          prixVente: 'Catalogue',
+          prixAchat: 'Catalogue',
+          marge: 'Écart inventaire',
+          margeClass: 'text-amber-700 font-semibold',
+          stock: '-1 unité',
+          action: 'Remettre le compteur à 0 et verrouiller la vente sans stock autorisé.'
+        },
+        {
+          id: 'ID 4039',
+          category: 'statut_incoherent',
+          badge: 'Statut incohérent',
+          badgeClass: 'bg-sky-100 text-sky-900 border-sky-200',
+          title: 'Référence Catalogue #4039 (Stock bloqué)',
+          prixVente: 'Catalogue',
+          prixAchat: 'Catalogue',
+          marge: 'Manque à gagner',
+          margeClass: 'text-petrol font-semibold',
+          stock: '3 en stock / outofstock',
+          action: 'Basculer le statut en instock pour débloquer la vente en ligne.'
+        },
+        {
+          id: 'ID 4885',
+          category: 'statut_incoherent',
+          badge: 'Statut incohérent',
+          badgeClass: 'bg-sky-100 text-sky-900 border-sky-200',
+          title: 'Référence Catalogue #4885 (Risque litige)',
+          prixVente: 'Catalogue',
+          prixAchat: 'Catalogue',
+          marge: 'Risque client',
+          margeClass: 'text-petrol font-semibold',
+          stock: '0 en stock / instock',
+          action: 'Passer en outofstock pour éviter les commandes impossibles à honorer.'
+        },
+        {
+          id: 'ID 4352',
+          category: 'rupture_publie',
+          badge: 'Publié en rupture',
+          badgeClass: 'bg-purple-100 text-purple-900 border-purple-200',
+          title: 'Champagne Egly-Ouriet Grand Cru Millésimé 2008',
+          prixVente: '225,00 €',
+          prixAchat: 'Haut de gamme',
+          marge: 'Outlier légitime',
+          margeClass: 'text-emerald-700 font-semibold',
+          stock: '0 en stock (Publié Web)',
+          action: 'Cuvée phare très demandée : sécuriser l’allocation fournisseur ou afficher une alerte disponibilité.'
+        }
+      ];
+
+      const tbody = document.getElementById('anomalies-tbody');
+      const counter = document.getElementById('anomaly-counter');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+
+      function renderAnomalies(filter) {
+        const filtered = filter === 'all'
+          ? anomaliesData
+          : anomaliesData.filter(item => item.category === filter);
+
+        counter.textContent = `${filtered.length} référence${filtered.length > 1 ? 's' : ''} affichée${filtered.length > 1 ? 's' : ''}`;
+
+        tbody.innerHTML = filtered.map(item => `
+          <tr class="hover:bg-cream/80 transition">
+            <td class="py-3.5 px-4 font-mono font-bold text-ink whitespace-nowrap">${item.id}</td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <span class="inline-block px-2.5 py-1 rounded-md text-xs font-semibold border ${item.badgeClass}">
+                ${item.badge}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 font-medium text-ink min-w-[200px]">${item.title}</td>
+            <td class="py-3.5 px-4 text-right font-mono text-ink whitespace-nowrap">${item.prixVente}</td>
+            <td class="py-3.5 px-4 text-right font-mono text-muted whitespace-nowrap">${item.prixAchat}</td>
+            <td class="py-3.5 px-4 text-right font-mono whitespace-nowrap ${item.margeClass}">${item.marge}</td>
+            <td class="py-3.5 px-4 text-center text-xs font-mono text-ink whitespace-nowrap">${item.stock}</td>
+            <td class="py-3.5 px-4 text-xs text-muted min-w-[220px]">${item.action}</td>
+          </tr>
+        `).join('');
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-bordeaux', 'text-white', 'shadow-sm');
+            b.classList.add('bg-white', 'text-ink', 'border', 'border-stone-200');
+          });
+          btn.classList.remove('bg-white', 'text-ink', 'border', 'border-stone-200');
+          btn.classList.add('bg-bordeaux', 'text-white', 'shadow-sm');
+          renderAnomalies(btn.dataset.filter);
+        });
+      });
+
+      renderAnomalies('all');
+
+      // 5. Gestion des Onglets Section 5
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => {
+            b.classList.remove('bg-petrol', 'text-white', 'shadow-sm');
+            b.classList.add('bg-white', 'text-ink', 'border', 'border-stone-200');
+          });
+          btn.classList.remove('bg-white', 'text-ink', 'border', 'border-stone-200');
+          btn.classList.add('bg-petrol', 'text-white', 'shadow-sm');
+
+          const targetId = btn.dataset.tab;
+          tabPanels.forEach(panel => {
+            if (panel.id === targetId) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+
+      // 6. Initialisation des Graphiques Chart.js
+      Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+      Chart.defaults.color = '#5C554E';
+
+      const ctxStock = document.getElementById('stockChart').getContext('2d');
+      new Chart(ctxStock, {
+        type: 'doughnut',
+        data: {
+          labels: [
+            'Flop 20 (> 31 mois rotation)',
+            'Autre Stock Dormant',
+            'Stock Actif / Courant'
+          ],
+          datasets: [{
+            data: [87108.25, 171240.62, 40191.20],
+            backgroundColor: ['#6B1D2F', '#D4A536', '#1E3A5F'],
+            borderColor: '#FFFFFF',
+            borderWidth: 3,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '64%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                padding: 14,
+                font: { size: 11, weight: '600' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const val = context.parsed;
+                  const pct = ((val / 298540.07) * 100).toFixed(2);
+                  return ` ${val.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} € (${pct} %)`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const ctxMargin = document.getElementById('marginChart').getContext('2d');
+      new Chart(ctxMargin, {
+        type: 'bar',
+        data: {
+          labels: [
+            'Cognac',
+            'Whisky / Gin',
+            'Champagne & Vins Fins',
+            'Vins Rouges & Blancs',
+            'Huile d’olive'
+          ],
+          datasets: [{
+            label: 'Taux de marge sur coût HT (%)',
+            data: [119.0, 113.5, 93.0, 74.5, 60.0],
+            backgroundColor: [
+              '#1E3A5F',
+              '#2D5282',
+              '#6B1D2F',
+              '#B8860B',
+              '#9CA3AF'
+            ],
+            borderRadius: 8,
+            barPercentage: 0.58
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` Marge moyenne : ${context.parsed.y} %`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 140,
+              grid: { color: '#F2EDE4' },
+              ticks: {
+                callback: value => value + ' %',
+                font: { family: "'JetBrains Mono', monospace", size: 11 }
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '600' } }
+            }
+          }
+        }
+      });
+
+      const ctxAnomalies = document.getElementById('anomaliesChart').getContext('2d');
+      new Chart(ctxAnomalies, {
+        type: 'bar',
+        data: {
+          labels: [
+            'Stock ERP non publié en ligne',
+            'Produits publiés en rupture de stock',
+            'Marge négative (Vente à perte)',
+            'Prix de vente négatif',
+            'Stock physique négatif',
+            'Statut de stock incohérent (instock/outofstock)'
+          ],
+          datasets: [{
+            label: 'Nombre de lignes détectées',
+            data: [65, 48, 4, 3, 2, 2],
+            backgroundColor: [
+              '#B8860B',
+              '#1E3A5F',
+              '#6B1D2F',
+              '#991B1B',
+              '#D97706',
+              '#4B5563'
+            ],
+            borderRadius: 6,
+            barPercentage: 0.65
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const count = context.parsed.x;
+                  const pct = ((count / 124) * 100).toFixed(1);
+                  return ` ${count} anomalies (${pct} % du total des 124 cas)`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 75,
+              grid: { color: '#F2EDE4' },
+              ticks: {
+                font: { family: "'JetBrains Mono', monospace", size: 11 }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 12, weight: '600' }, color: '#1E1B18' }
+            }
+          }
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
